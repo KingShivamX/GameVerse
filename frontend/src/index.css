@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --bg-core: #0F1923;
+        --bg-dark: #0D0D0D;
+        --primary: #FF4655;
+        --secondary: #FCE300;
+        --text-main: #FFFFFF;
+        --text-dim: #9CA3AF;
+        --border: rgba(255, 255, 255, 0.1);
+        --surface: rgba(15, 25, 35, 0.8);
+        --hud-bg: rgba(15, 25, 35, 0.8);
+    }
+
+    body {
+        @apply bg-game-dark text-game-white font-sans antialiased;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Cinematic Typography */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 0.95;
+    }
+
+    p {
+        line-height: 1.7;
+        font-weight: 300;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #0D0D0D;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #7B4FF1;
+    }
+
+    /* Selection */
+    ::selection {
+        background-color: #FF4655;
+        /* Game Red */
+        color: black;
+    }
+}
+
+@layer utilities {
+    .fade-up {
+        opacity: 0;
+        transform: translateY(80px);
+    }
+
+    .parallax-img {
+        will-change: transform;
+    }
+
+    .clip-path-slant {
+        clip-path: polygon(20px 0, 100% 0,
+                100% calc(100% - 20px), calc(100% - 20px) 100%,
+                0 100%, 0 20px);
+    }
+
+    .text-stroke-red {
+        -webkit-text-stroke: 1px #FF4655;
+        color: transparent;
+    }
+}
