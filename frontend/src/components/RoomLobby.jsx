@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Users, Plus, Lock, Radio } from 'lucide-react';
 
 export default function RoomLobby({ onJoinRoom, username }) {
@@ -16,7 +16,7 @@ export default function RoomLobby({ onJoinRoom, username }) {
 
     const fetchRooms = async () => {
         try {
-            const res = await axios.get('/api/chat/rooms');
+            const res = await api.get('/api/chat/rooms');
             setRooms(res.data);
         } catch (err) {
             console.error(err);
@@ -26,7 +26,7 @@ export default function RoomLobby({ onJoinRoom, username }) {
     const handleCreate = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('/api/chat/rooms', {
+            const res = await api.post('/api/chat/rooms', {
                 name: newRoomName,
                 maxMembers: parseInt(newRoomLimit),
                 createdBy: username
@@ -41,7 +41,7 @@ export default function RoomLobby({ onJoinRoom, username }) {
 
     const handleJoin = async (room) => {
         try {
-            await axios.post(`/api/chat/rooms/${room.id}/join`, { username });
+            await api.post(`/api/chat/rooms/${room.id}/join`, { username });
             onJoinRoom(room);
         } catch (err) {
             alert(err.response?.data || 'Cannot join room');

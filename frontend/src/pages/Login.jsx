@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ArrowLeft, User, Lock, ArrowRight, AlertCircle, Crosshair, Shield, Hexagon, Palette } from 'lucide-react';
-import axios from 'axios';
+import api from '../api';
 
 import { useAudio } from '../context/AudioContext';
 import { useTheme } from '../context/ThemeContext';
@@ -57,7 +57,7 @@ export default function Login() {
         setError('');
 
         try {
-            const response = await axios.post('/api/auth/login', formData, {
+            const response = await api.post('/api/auth/login', formData, {
                 headers: { 'Content-Type': 'application/json' }
             });
 

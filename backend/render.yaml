@@ -1,0 +1,18 @@
+# Render deployment configuration for Spring Boot backend
+services:
+  - type: web
+    name: gameverse-backend
+    runtime: docker
+    env: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://db.snghzpqnfhlrepiuyfog.supabase.co:5432/postgres
+      - key: SPRING_DATASOURCE_USERNAME
+        value: postgres
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: PORT
+        value: 8080

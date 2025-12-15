@@ -12,6 +12,11 @@ import ChatPage from './pages/ChatPage';
 import GamesPage from './pages/GamesPage';
 import SnakeGame from './pages/SnakeGame';
 import TicTacToeGame from './pages/TicTacToeGame';
+// Multiplayer Games
+import MultiplayerLobby from './pages/MultiplayerLobby';
+import MultiplayerTicTacToe from './pages/MultiplayerTicTacToe';
+import ConnectFour from './pages/ConnectFour';
+import MultiplayerPong from './pages/MultiplayerPong';
 import { AudioProvider } from './context/AudioContext';
 
 import { ThemeProvider } from './context/ThemeContext';
@@ -35,6 +40,14 @@ function App() {
             <Route path="/games" element={<GamesPage />} />
             <Route path="/games/snake" element={<SnakeGame />} />
             <Route path="/games/tictactoe" element={<TicTacToeGame />} />
+            {/* Multiplayer Routes */}
+            <Route path="/multiplayer" element={<MultiplayerLobby />} />
+            <Route path="/games/mp-tictactoe" element={<MultiplayerTicTacToe />} />
+            <Route path="/games/mp-tictactoe/:roomId" element={<MultiplayerTicTacToe />} />
+            <Route path="/games/connect-four" element={<ConnectFour />} />
+            <Route path="/games/connect-four/:roomId" element={<ConnectFour />} />
+            <Route path="/games/pong" element={<MultiplayerPong />} />
+            <Route path="/games/pong/:roomId" element={<MultiplayerPong />} />
           </Routes>
         </Router>
       </ThemeProvider>
@@ -43,3 +56,4 @@ function App() {
 }
 
 export default App;
+

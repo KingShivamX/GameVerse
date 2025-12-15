@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
-import axios from 'axios';
+import api from '../api';
 // --- 3D IMPORTS ---
 import { Canvas } from '@react-three/fiber';
 import { Stars, Sparkles, Environment } from '@react-three/drei';
@@ -117,7 +117,7 @@ export default function ChatPage() {
     const handleLeaveRoom = async () => {
         if (currentRoom) {
             try {
-                await axios.post(`/api/chat/rooms/${currentRoom.id}/leave`, { username });
+                await api.post(`/api/chat/rooms/${currentRoom.id}/leave`, { username });
             } catch (e) {
                 console.error("Error leaving room:", e);
             }

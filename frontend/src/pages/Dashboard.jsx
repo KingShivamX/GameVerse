@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
-import axios from 'axios';
+import api from '../api';
 // --- 3D IMPORTS ---
 import { Canvas, useFrame } from '@react-three/fiber';
 import {
@@ -129,8 +129,8 @@ export default function Dashboard() {
             }
             try {
                 const [statsRes, matchesRes] = await Promise.allSettled([
-                    axios.get(`/api/users/${storedUser}/stats`),
-                    axios.get(`/api/matches/user/${storedUser}`)
+                    api.get(`/api/users/${storedUser}/stats`),
+                    api.get(`/api/matches/user/${storedUser}`)
                 ]);
                 if (statsRes.status === 'fulfilled') setStats(statsRes.value.data);
                 if (matchesRes.status === 'fulfilled') setMatches(matchesRes.value.data);

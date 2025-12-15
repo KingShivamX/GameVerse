@@ -106,14 +106,16 @@ export default function GamesPage() {
         navigate('/login');
     };
 
-    const games = [
+    // Single player games
+    const singlePlayerGames = [
         {
             id: 'snake',
             title: 'SNAKE PROTOCOL',
             desc: 'Navigate the grid. Consume data packets. Avoid termination.',
             path: '/games/snake',
             image: 'https://images.unsplash.com/photo-1634063182170-5c1755edfed8?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            stats: 'HIGH SCORE TRACKED'
+            stats: 'HIGH SCORE TRACKED',
+            multiplayer: false
         },
         {
             id: 'tictactoe',
@@ -121,9 +123,43 @@ export default function GamesPage() {
             desc: 'Tactical grid domination. Outsmart the AI defense system.',
             path: '/games/tictactoe',
             image: 'https://images.unsplash.com/photo-1668901382969-8c73e450a1f5?w=800&q=80',
-            stats: 'WINS AFFECT GLOBAL RANK'
+            stats: 'WINS AFFECT GLOBAL RANK',
+            multiplayer: false
         }
     ];
+
+    // Multiplayer games
+    const multiplayerGames = [
+        {
+            id: 'mp-tictactoe',
+            title: 'TACTICAL GRID',
+            desc: 'Strategic 3x3 domination. Face real opponents online.',
+            path: '/multiplayer',
+            image: 'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=800&q=80',
+            stats: '2 PLAYERS • ONLINE',
+            multiplayer: true
+        },
+        {
+            id: 'connect-four',
+            title: 'GRAVITY DROP',
+            desc: 'Vertical warfare. Connect four before your enemy does.',
+            path: '/multiplayer',
+            image: 'https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&q=80',
+            stats: '2 PLAYERS • ONLINE',
+            multiplayer: true
+        },
+        {
+            id: 'pong',
+            title: 'NEON PONG',
+            desc: 'High-speed paddle combat. First to 5 wins.',
+            path: '/multiplayer',
+            image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80',
+            stats: '2 PLAYERS • LOCAL',
+            multiplayer: true
+        }
+    ];
+
+    const games = [...singlePlayerGames, ...multiplayerGames];
 
     return (
         <div ref={mainRef} className="min-h-screen bg-game-dark text-game-white font-sans overflow-hidden flex cursor-none selection:bg-game-red selection:text-black relative">
@@ -198,28 +234,36 @@ export default function GamesPage() {
                     </div>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl">
                     {games.map((game, idx) => (
                         <div
                             key={game.id}
                             onClick={() => navigate(game.path)}
-                            className="game-card group relative h-80 bg-game-surface backdrop-blur-sm border border-white/10 hover:border-game-red transition-all duration-300 cursor-pointer overflow-hidden clip-path-slant"
+                            className="game-card group relative h-72 bg-game-surface backdrop-blur-sm border border-white/10 hover:border-game-red transition-all duration-300 cursor-pointer overflow-hidden clip-path-slant"
                         >
                             {/* Bg Image */}
                             <div className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:scale-110 transition-transform duration-700" style={{ backgroundImage: `url(${game.image})` }} />
                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
-                            <div className="absolute bottom-0 left-0 p-8 w-full">
+                            {/* Multiplayer Badge */}
+                            {game.multiplayer && (
+                                <div className="absolute top-4 right-4 flex items-center gap-2 bg-game-red/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider z-10">
+                                    <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                                    ONLINE
+                                </div>
+                            )}
+
+                            <div className="absolute bottom-0 left-0 p-6 w-full">
                                 <div className="flex justify-between items-end mb-2">
-                                    <h2 className="text-3xl font-black uppercase italic tracking-tighter text-game-white group-hover:text-game-yellow transition-colors">
+                                    <h2 className="text-2xl font-black uppercase italic tracking-tighter text-game-white group-hover:text-game-yellow transition-colors">
                                         {game.title}
                                     </h2>
-                                    <Play className="w-8 h-8 text-game-red opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300" />
+                                    <Play className="w-6 h-6 text-game-red opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300" />
                                 </div>
-                                <p className="text-game-dim text-sm font-mono mb-4 border-l-2 border-game-red pl-3">
+                                <p className="text-game-gray text-xs font-mono mb-3 border-l-2 border-game-red pl-3 line-clamp-2">
                                     {game.desc}
                                 </p>
-                                <div className="inline-block bg-game-red/20 border border-game-red/50 text-game-red text-[10px] uppercase font-bold px-2 py-1 tracking-widest">
+                                <div className={`inline-block ${game.multiplayer ? 'bg-game-yellow/20 border-game-yellow/50 text-game-yellow' : 'bg-game-red/20 border-game-red/50 text-game-red'} border text-[10px] uppercase font-bold px-2 py-1 tracking-widest`}>
                                     {game.stats}
                                 </div>
                             </div>

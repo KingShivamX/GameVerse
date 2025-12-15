@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { gsap } from 'gsap';
 import { useNavigate } from 'react-router-dom';
 // --- 3D IMPORTS ---
@@ -75,8 +75,8 @@ export default function Profile() {
             try {
                 // Parallel Fetching
                 const [statsRes, matchesRes] = await Promise.allSettled([
-                    axios.get(`/api/users/${username}/stats`),
-                    axios.get(`/api/matches/user/${username}`)
+                    api.get(`/api/users/${username}/stats`),
+                    api.get(`/api/matches/user/${username}`)
                 ]);
 
                 // Handle Stats
@@ -162,7 +162,7 @@ export default function Profile() {
             // Save logic
             try {
                 const username = localStorage.getItem('username');
-                await axios.put(`/api/users/${username}/bio`, { bio: user.bio });
+                await api.put(`/api/users/${username}/bio`, { bio: user.bio });
                 // Optional: Play success sound if context available
                 setIsEditing(false);
             } catch (err) {

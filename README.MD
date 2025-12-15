@@ -1,19 +1,20 @@
 # GameVerse Nexus - Project Summary & Developer Guide
 
-**Version:** 4.2 (Neural Link Enabled)
-**Status:** Active Development
+**Version:** 5.0 (Multiplayer Ready)
+**Status:** Production Ready 🚀
 
 ## 1. Project Overview
-GameVerse Nexus is a high-performance, futuristic gaming platform that combines a **Spring Boot** backend with a cutting-edge **React (Vite)** frontend. It features 3D visualizations, real-time hand tracking ("Neural Link"), dynamic themes, and a competitive ranking system.
+GameVerse Nexus is a high-performance, futuristic gaming platform that combines a **Spring Boot** backend with a cutting-edge **React (Vite)** frontend. Features include 3D visualizations, real-time hand tracking ("Neural Link"), dynamic themes, competitive ranking, and **multiplayer games**.
 
 ## 2. Technology Stack
 
 ### Backend (Spring Boot)
 - **Language:** Java 17
 - **Framework:** Spring Boot 3.2.3
-- **Database:** MySQL (`gameverse_db`)
-- **Security:** Spring Security (Basic Auth / JWT structure ready)
+- **Database:** PostgreSQL (Supabase)
+- **Security:** Spring Security (CORS + CSRF protection)
 - **Build Tool:** Maven
+- **Deployment:** Render (Docker)
 
 ### Frontend (React)
 - **Framework:** React 19 + Vite
@@ -23,21 +24,35 @@ GameVerse Nexus is a high-performance, futuristic gaming platform that combines 
 - **Data Viz:** Recharts (Radar, Area, Pie, Radial Charts)
 - **AI/ML:** TensorFlow.js + Handpose (Gesture Control)
 - **Icons:** Lucide React
+- **Deployment:** Vercel
 
 ## 3. Setup Instructions
 
 ### Prerequisites
 - JDK 17+
 - Node.js 18+
-- MySQL Server
+- PostgreSQL database (or Supabase account)
 
-### Database Setup
-1.  Ensure MySQL is running on port `3306`.
-2.  Create database: `CREATE DATABASE gameverse_db;` (Optional, app creates it automatically).
-3.  **Credentials:**
-    - User: `root`
-    - Pass: `Root@123`
-    - *Config location:* [backend/src/main/resources/application.properties](file:///c:/Users/kshit/Desktop/gaming%20site/backend/src/main/resources/application.properties)
+### Database Setup (Supabase)
+1. Create a project at [supabase.com](https://supabase.com)
+2. Note your database credentials from Settings → Database
+3. Tables are auto-created by Hibernate on first run
+
+### Environment Variables
+
+#### Backend (`backend/src/main/resources/application.properties`)
+```properties
+spring.datasource.url=jdbc:postgresql://YOUR_HOST:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=YOUR_PASSWORD
+app.cors.allowed-origins=http://localhost:5173,https://your-vercel-app.vercel.app
+```
+
+#### Frontend (`frontend/.env`)
+```env
+VITE_API_URL=http://localhost:8080
+# For production: VITE_API_URL=https://your-render-backend.onrender.com
+```
 
 ### Backend Launch
 ```bash
@@ -56,82 +71,96 @@ npm run dev
 
 ---
 
-## 4. API Documentation
+## 4. Deployment
+
+### Backend → Render
+1. Push code to GitHub
+2. Create new **Web Service** on Render
+3. Connect your repository, select `backend` directory
+4. Build Command: (auto-detected from Dockerfile)
+5. Set environment variables:
+   - `SPRING_DATASOURCE_URL`: Your Supabase PostgreSQL URL
+   - `SPRING_DATASOURCE_USERNAME`: `postgres`
+   - `SPRING_DATASOURCE_PASSWORD`: Your Supabase password
+   - `CORS_ORIGINS`: Your Vercel frontend URL
+
+### Frontend → Vercel
+1. Push code to GitHub
+2. Import project on Vercel
+3. Set root directory to `frontend`
+4. Set environment variable:
+   - `VITE_API_URL`: Your Render backend URL
+5. Deploy!
+
+---
+
+## 5. API Documentation
+
+### Root (`/`)
+- **GET** `/` - Health check, returns service info
 
 ### Authentication (`/api/auth`)
-- **POST** `/signup`
-    - Body: `{ "username": "...", "password": "...", "email": "..." }`
-    - Returns: User ID & Success Message.
-- **POST** `/login`
-    - Body: `{ "username": "...", "password": "..." }`
-    - Returns: User info (Mock JWT behavior).
+- **POST** `/signup` - Register new user
+- **POST** `/login` - Login user
 
 ### Games & Stats (`/api/games`)
-- **GET** `/` - List all available games.
-- **POST** `/init` - Seem database with default games (Cyberpunk Arena, etc.).
-- **POST** `/submit`
-    - Body: `{ "username": "...", "game": "SNAKE", "score": 1500, "result": "WIN", "duration": 300 }`
-    - **Logic:** Updates XP, Rank Badge (Bronze -> Diamond), Snake High Score, and Playtime.
+- **GET** `/` - List all available games
+- **POST** `/submit` - Submit game result (score, wins, etc.)
 
 ### Users (`/api/users`)
-- **GET** `/{username}/stats` - Get full profile (Wins, Loss, K/D, Bio, Rank).
-- **PUT** `/{userId}/bio` - Update user biography.
+- **GET** `/{username}/stats` - Get full profile
+- **PUT** `/{userId}/bio` - Update biography
 
 ---
 
-## 5. Key Features & Components
+## 6. Available Games
 
-### 🧠 Neural Link (Hand Tracking)
-- **Component:** [HandControlOverlay.jsx](file:///c:/Users/kshit/Desktop/gaming%20site/frontend/src/components/HandControlOverlay.jsx)
-- **Tech:** TensorFlow.js `handpose` model.
-- **Functionality:**
-    - **Virtual Cursor:** Follows index finger index `[8]`.
-    - **Click:** Pinch gesture (Thumb `[4]` + Index `[8]` distance < 30px).
-    - **Scroll:** Move hand to top/bottom 10% of screen.
-- **Activation:** Toggle via "Crosshair" icon in Dashboard sidebar.
+### Single Player
+| Game | Description |
+|------|-------------|
+| **Snake Protocol** | Classic snake with high score tracking |
+| **Tic-Tac-Toe Siege** | Play against AI |
 
-### 💎 Interactive Dashboard ([Dashboard.jsx](file:///c:/Users/kshit/Desktop/gaming%20site/frontend/src/pages/Dashboard.jsx))
-- **3D Crystal:** React Three Fiber mesh that reacts to hover/mouse interaction.
-- **Charts:**
-    - **Win/Loss:** Pie Chart.
-    - **Skill Graph:** Radar Chart (Tactics, Reflexes, etc.).
-    - **Playtime:** Radial Bar Chart.
-    - **Trend:** Area Chart (Last 10 matches).
-- **Audio:** Background Phonk music + SFX on hover/click ([AudioContext.jsx](file:///c:/Users/kshit/Desktop/gaming%20site/frontend/src/context/AudioContext.jsx)).
-
-### 🎨 Dynamic Theme System ([ThemeContext.jsx](file:///c:/Users/kshit/Desktop/gaming%20site/frontend/src/context/ThemeContext.jsx))
-- **Themes:** CYBER, MIDAS, OLYMPUS.
-- **Mechanism:** Updates CSS Variables (`--primary`, `--bg-core`) globally on the `document.documentElement`.
-- **Switcher:** Palette icon in Sidebar.
+### Multiplayer
+| Game | Description |
+|------|-------------|
+| **Tactical Grid** | 2-player Tic-Tac-Toe with room codes |
+| **Gravity Drop** | Connect Four with animated drops |
+| **Neon Pong** | Real-time paddle combat (W/S + ↑/↓) |
 
 ---
 
-## 6. Project Structure
+## 7. Project Structure
 
 ```text
 root/
 ├── backend/
 │   ├── src/main/java/com/example/demo/
 │   │   ├── controller/   # API Endpoints
-│   │   ├── model/        # JPA Entities (User, Game, Match)
-│   │   ├── repository/   # data Access Layer
+│   │   ├── config/       # Security & CORS
+│   │   ├── model/        # JPA Entities
+│   │   ├── repository/   # Data Access Layer
 │   │   └── service/      # Business Logic
-│   └── pom.xml           # Backend Dependencies
+│   ├── Dockerfile        # Render deployment
+│   ├── render.yaml       # Render config
+│   └── pom.xml           # Maven dependencies
 │
 └── frontend/
     ├── src/
-    │   ├── components/   # Reusable UI (HandControlOverlay, Navbar)
+    │   ├── api.js        # Axios configuration
+    │   ├── components/   # Reusable UI
     │   ├── context/      # Global State (Theme, Audio)
-    │   ├── pages/        # Route Views (Dashboard, Login, Games)
-    │   ├── App.jsx       # Routing & Context Providers
-    │   └── main.jsx      # Entry Point
-    └── package.json      # Frontend Dependencies
+    │   ├── pages/        # Route Views
+    │   └── App.jsx       # Routing
+    ├── vercel.json       # Vercel config
+    └── package.json      # Dependencies
 ```
 
-## 7. Troubleshooting
-- **Login fails (403):** Check [SecurityConfig.java](file:///c:/Users/kshit/Desktop/gaming%20site/backend/src/main/java/com/example/demo/config/SecurityConfig.java). Ensure `/api/auth/**` is permitted.
-- **Hand Tracking lag:** Ensure WebGL is enabled in browser. Requires decent GPU.
-- **Database connection error:** Verify MySQL is running and password matches [application.properties](file:///c:/Users/kshit/Desktop/gaming%20site/backend/src/main/resources/application.properties).
+## 8. Troubleshooting
+- **CORS errors:** Ensure `CORS_ORIGINS` includes your frontend URL
+- **Database connection:** Verify Supabase credentials and IP whitelist
+- **Build fails:** Run `mvn clean install` locally first
+- **Frontend 404s on refresh:** Vercel rewrites handle this via `vercel.json`
 
 ---
-*Generated by Antigravity AI*
+*Built with ❤️ by GameVerse Team*

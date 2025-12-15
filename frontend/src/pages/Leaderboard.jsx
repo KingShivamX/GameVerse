@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { gsap } from 'gsap';
 // --- 3D IMPORTS ---
 import { Canvas } from '@react-three/fiber';
@@ -51,7 +51,7 @@ export default function Leaderboard() {
 
     // --- DATA FETCHING ---
     useEffect(() => {
-        axios.get('/api/users/leaderboard')
+        api.get('/api/users/leaderboard')
             .then(res => {
                 setUsers(res.data);
                 setLoading(false);

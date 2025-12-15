@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ArrowLeft, User, Lock, Mail, ArrowRight, AlertCircle, Cpu, Hexagon, Palette } from 'lucide-react';
-import axios from 'axios';
+import api from '../api';
 import { useTheme } from '../context/ThemeContext';
 
 export default function Signup() {
@@ -61,7 +61,7 @@ export default function Signup() {
         try {
             const { confirmPassword, ...signupData } = formData;
 
-            const response = await axios.post('/api/auth/signup', signupData, {
+            const response = await api.post('/api/auth/signup', signupData, {
                 headers: { 'Content-Type': 'application/json' }
             });
 

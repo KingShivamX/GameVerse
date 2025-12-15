@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ArrowLeft, Trophy, Activity, AlertTriangle, Palette } from 'lucide-react';
-import axios from 'axios';
+import api from '../api';
 import { useAudio } from '../context/AudioContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -41,7 +41,7 @@ export default function SnakeGame() {
 
         const fetchStats = async () => {
             try {
-                const res = await axios.get(`/api/users/${username}/stats`);
+                const res = await api.get(`/api/users/${username}/stats`);
                 setHighScore(res.data.snakeHighScore || 0);
             } catch (e) {
                 console.error("Failed to fetch stats", e);
@@ -101,7 +101,7 @@ export default function SnakeGame() {
         setIsSubmitting(true);
         try {
             console.log("Submitting score for", username, scoreRef.current);
-            const res = await axios.post('/api/games/submit', {
+            const res = await api.post('/api/games/submit', {
                 username,
                 game: 'SNAKE',
                 score: scoreRef.current,

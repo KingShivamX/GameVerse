@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, X, Circle, RotateCcw, Palette } from 'lucide-react';
-import axios from 'axios';
+import api from '../api';
 import { useTheme } from '../context/ThemeContext';
 
 export default function TicTacToeGame() {
@@ -19,7 +19,7 @@ export default function TicTacToeGame() {
             const username = localStorage.getItem('username');
             if (username) {
                 try {
-                    const res = await axios.get(`/api/users/${username}/stats`);
+                    const res = await api.get(`/api/users/${username}/stats`);
                     setStats({ wins: res.data.wins || 0, losses: res.data.losses || 0 });
                 } catch (e) {
                     console.error("Failed to fetch TTT stats", e);
@@ -110,7 +110,7 @@ export default function TicTacToeGame() {
 
         setIsSubmitting(true);
         try {
-            const res = await axios.post('/api/games/submit', {
+            const res = await api.post('/api/games/submit', {
                 username,
                 game: 'TICTACTOE',
                 score: 0,

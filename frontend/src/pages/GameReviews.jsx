@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { gsap } from 'gsap';
 import { useNavigate } from 'react-router-dom';
 // --- 3D IMPORTS ---
@@ -67,7 +67,7 @@ export default function GameReviews() {
             const username = localStorage.getItem('username');
             if (username) {
                 try {
-                    const res = await axios.get(`/api/users/${username}`);
+                    const res = await api.get(`/api/users/${username}`);
                     if (res.data && res.data.id) {
                         setUserId(res.data.id);
                     }
@@ -84,9 +84,9 @@ export default function GameReviews() {
         const fetchGames = async () => {
             try {
                 // Initialize endpoint check
-                try { await axios.post('/api/games/init'); } catch (e) { }
+                try { await api.post('/api/games/init'); } catch (e) { }
 
-                const res = await axios.get('/api/games');
+                const res = await api.get('/api/games');
 
                 if (res?.data && Array.isArray(res.data) && res.data.length > 0) {
                     const mappedGames = res.data.map((g) => ({
@@ -125,7 +125,7 @@ export default function GameReviews() {
         let mounted = true;
         const fetchReviews = async () => {
             try {
-                const res = await axios.get(`/api/games/${selectedGame.id}/reviews`);
+                const res = await api.get(`/api/games/${selectedGame.id}/reviews`);
                 if (!mounted) return;
                 setGameReviews(Array.isArray(res.data) ? res.data : []);
             } catch (err) {
@@ -148,7 +148,7 @@ export default function GameReviews() {
         const authorId = userId || 1;
 
         try {
-            const response = await axios.post(`/api/games/${selectedGame.id}/reviews`, {
+            const response = await api.post(`/api/games/${selectedGame.id}/reviews`, {
                 username, userId: authorId, rating: 5, comment: reviewText
             });
             const created = response?.data ? response.data : { id: Date.now(), username, rating: 5, comment: reviewText, createdAt: new Date().toISOString() };
